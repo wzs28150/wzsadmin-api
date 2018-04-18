@@ -56,6 +56,8 @@ abstract class Connection
     protected $attrCase = PDO::CASE_LOWER;
     // 监听回调
     protected static $event = [];
+    // 查询对象
+    protected $query = [];
     // 使用Builder类
     protected $builder;
     // 数据库连接参数配置
@@ -123,7 +125,7 @@ abstract class Connection
     protected $bind = [];
 
     /**
-     * 构造函数 读取数据库配置信息
+     * 架构函数 读取数据库配置信息
      * @access public
      * @param array $config 数据库配置数组
      */
@@ -135,14 +137,19 @@ abstract class Connection
     }
 
     /**
-     * 获取新的查询对象
-     * @access protected
+     * 创建指定模型的查询对象
+     * @access public
+     * @param string $model 模型类名称
+     * @param string $queryClass 查询对象类名
      * @return Query
      */
-    protected function getQuery()
+    public function getQuery($model = 'db', $queryClass = '')
     {
-        $class = $this->config['query'];
-        return new $class($this);
+        if (!isset($this->query[$model])) {
+            $class               = $queryClass ?: $this->config['query'];
+            $this->query[$model] = new $class($this, 'db' == $model ? '' : $model);
+        }
+        return $this->query[$model];
     }
 
     /**
@@ -333,9 +340,13 @@ abstract class Connection
     /**
      * 执行查询 返回数据集
      * @access public
+     * @param string    $sql sql指令
+     * @param array     $bind 参数绑定
+     * @param bool      $master 是否在主服务器读操作
+     * @param bool      $class 是否返回PDO对象
      * @param string        $sql sql指令
      * @param array         $bind 参数绑定
-     * @param bool          $master 是否在主服务器读操作
+     * @param boolean       $master 是否在主服务器读操作
      * @param bool          $pdo 是否返回PDO对象
      * @return mixed
      * @throws BindParamException
@@ -354,8 +365,8 @@ abstract class Connection
             $this->bind = $bind;
         }
 
-        // 释放前次的查询结果
-        if (!empty($this->PDOStatement)) {
+        //释放前次的查询结果
+        if (!empty($this->PDOStatement) && $this->PDOStatement->queryString != $sql) {
             $this->free();
         }
 
@@ -382,15 +393,10 @@ abstract class Connection
             // 返回结果集
             return $this->getResult($pdo, $procedure);
         } catch (\PDOException $e) {
-            if ($this->isBreak($e)) {
+            if ($this->config['break_reconnect'] && $this->isBreak($e)) {
                 return $this->close()->query($sql, $bind, $master, $pdo);
             }
             throw new PDOException($e, $this->config, $this->getLastsql());
-        } catch (\Exception $e) {
-            if ($this->isBreak($e)) {
-                return $this->close()->query($sql, $bind, $master, $pdo);
-            }
-            throw $e;
         }
     }
 
@@ -445,15 +451,10 @@ abstract class Connection
             $this->numRows = $this->PDOStatement->rowCount();
             return $this->numRows;
         } catch (\PDOException $e) {
-            if ($this->isBreak($e)) {
+            if ($this->config['break_reconnect'] && $this->isBreak($e)) {
                 return $this->close()->execute($sql, $bind);
             }
             throw new PDOException($e, $this->config, $this->getLastsql());
-        } catch (\Exception $e) {
-            if ($this->isBreak($e)) {
-                return $this->close()->execute($sql, $bind);
-            }
-            throw $e;
         }
     }
 
@@ -628,25 +629,13 @@ abstract class Connection
         }
 
         ++$this->transTimes;
-        try {
-            if (1 == $this->transTimes) {
-                $this->linkID->beginTransaction();
-            } elseif ($this->transTimes > 1 && $this->supportSavepoint()) {
-                $this->linkID->exec(
-                    $this->parseSavepoint('trans' . $this->transTimes)
-                );
-            }
 
-        } catch (\PDOException $e) {
-            if ($this->isBreak($e)) {
-                return $this->close()->startTrans();
-            }
-            throw $e;
-        } catch (\ErrorException $e) {
-            if ($this->isBreak($e)) {
-                return $this->close()->startTrans();
-            }
-            throw $e;
+        if (1 == $this->transTimes) {
+            $this->linkID->beginTransaction();
+        } elseif ($this->transTimes > 1 && $this->supportSavepoint()) {
+            $this->linkID->exec(
+                $this->parseSavepoint('trans' . $this->transTimes)
+            );
         }
     }
 
@@ -782,35 +771,11 @@ abstract class Connection
     /**
      * 是否断线
      * @access protected
-     * @param \PDOException  $e 异常对象
+     * @param \PDOException  $e 异常
      * @return bool
      */
     protected function isBreak($e)
     {
-        if (!$this->config['break_reconnect']) {
-            return false;
-        }
-
-        $info = [
-            'server has gone away',
-            'no connection to the server',
-            'Lost connection',
-            'is dead or not enabled',
-            'Error while sending',
-            'decryption failed or bad record mac',
-            'server closed the connection unexpectedly',
-            'SSL connection has been closed unexpectedly',
-            'Error writing data to the connection',
-            'Resource deadlock avoided',
-        ];
-
-        $error = $e->getMessage();
-
-        foreach ($info as $msg) {
-            if (false !== stripos($error, $msg)) {
-                return true;
-            }
-        }
         return false;
     }
 
@@ -895,6 +860,7 @@ abstract class Connection
                 Debug::remark('queryEndTime', 'time');
                 $runtime = Debug::getRangeTime('queryStartTime', 'queryEndTime');
                 $sql     = $sql ?: $this->getLastsql();
+                $log     = $sql . ' [ RunTime:' . $runtime . 's ]';
                 $result  = [];
                 // SQL性能分析
                 if ($this->config['sql_explain'] && 0 === stripos(trim($sql), 'select')) {
@@ -952,7 +918,7 @@ abstract class Connection
     {
         if (!empty($this->config['deploy'])) {
             // 采用分布式数据库
-            if ($master || $this->transTimes) {
+            if ($master) {
                 if (!$this->linkWrite) {
                     $this->linkWrite = $this->multiConnect(true);
                 }

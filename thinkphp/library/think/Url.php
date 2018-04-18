@@ -80,9 +80,6 @@ class Url
             if (!empty($match[1])) {
                 $domain = $match[1];
             }
-            if (!is_null($match[2])) {
-                $suffix = $match[2];
-            }
         } elseif (!empty($rule) && isset($name)) {
             throw new \InvalidArgumentException('route name not exists:' . $name);
         } else {
@@ -235,7 +232,7 @@ class Url
         $rootDomain = Config::get('url_domain_root');
         if (true === $domain) {
             // 自动判断域名
-            $domain = Config::get('app_host') ?: $request->host();
+            $domain = $request->host();
 
             $domains = Route::rules('domain');
             if ($domains) {
@@ -265,19 +262,14 @@ class Url
 
         } else {
             if (empty($rootDomain)) {
-                $host       = Config::get('app_host') ?: $request->host();
+                $host       = $request->host();
                 $rootDomain = substr_count($host, '.') > 1 ? substr(strstr($host, '.'), 1) : $host;
             }
-            if (substr_count($domain, '.') < 2 && !strpos($domain, $rootDomain)) {
+            if (!strpos($domain, $rootDomain)) {
                 $domain .= '.' . $rootDomain;
             }
         }
-        if (false !== strpos($domain, ':')) {
-            $scheme = '';
-        } else {
-            $scheme = $request->isSsl() || Config::get('is_https') ? 'https://' : 'http://';
-        }
-        return $scheme . $domain;
+        return ($request->isSsl() ? 'https://' : 'http://') . $domain;
     }
 
     // 解析URL后缀
@@ -296,18 +288,18 @@ class Url
     public static function getRuleUrl($rule, &$vars = [])
     {
         foreach ($rule as $item) {
-            list($url, $pattern, $domain, $suffix) = $item;
+            list($url, $pattern, $domain) = $item;
             if (empty($pattern)) {
-                return [$url, $domain, $suffix];
+                return [$url, $domain];
             }
             foreach ($pattern as $key => $val) {
                 if (isset($vars[$key])) {
-                    $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key . '', '<' . $key . '>'], urlencode($vars[$key]), $url);
+                    $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key . '', '<' . $key . '>'], $vars[$key], $url);
                     unset($vars[$key]);
-                    $result = [$url, $domain, $suffix];
+                    $result = [$url, $domain];
                 } elseif (2 == $val) {
                     $url    = str_replace(['/[:' . $key . ']', '[:' . $key . ']', '<' . $key . '?>'], '', $url);
-                    $result = [$url, $domain, $suffix];
+                    $result = [$url, $domain];
                 } else {
                     break;
                 }

@@ -19,6 +19,7 @@ use think\response\Xml as XmlResponse;
 
 class Response
 {
+
     // 原始数据
     protected $data;
 
@@ -39,7 +40,7 @@ class Response
     protected $content = null;
 
     /**
-     * 构造函数
+     * 架构函数
      * @access   public
      * @param mixed $data    输出数据
      * @param int   $code
@@ -49,12 +50,12 @@ class Response
     public function __construct($data = '', $code = 200, array $header = [], $options = [])
     {
         $this->data($data);
+        $this->header = $header;
+        $this->code   = $code;
         if (!empty($options)) {
             $this->options = array_merge($this->options, $options);
         }
         $this->contentType($this->contentType, $this->charset);
-        $this->header = array_merge($this->header, $header);
-        $this->code   = $code;
     }
 
     /**
@@ -72,12 +73,12 @@ class Response
         $type = empty($type) ? 'null' : strtolower($type);
 
         $class = false !== strpos($type, '\\') ? $type : '\\think\\response\\' . ucfirst($type);
-
         if (class_exists($class)) {
             $response = new $class($data, $code, $header, $options);
         } else {
             $response = new static($data, $code, $header, $options);
         }
+
         return $response;
     }
 
@@ -89,9 +90,6 @@ class Response
      */
     public function send()
     {
-        // 监听response_send
-        Hook::listen('response_send', $this);
-
         // 处理输出数据
         $data = $this->getContent();
 
@@ -115,14 +113,10 @@ class Response
             http_response_code($this->code);
             // 发送头部信息
             foreach ($this->header as $name => $val) {
-                if (is_null($val)) {
-                    header($name);
-                } else {
-                    header($name . ':' . $val);
-                }
+                header($name . ':' . $val);
             }
         }
-        
+
         echo $data;
 
         if (function_exists('fastcgi_finish_request')) {

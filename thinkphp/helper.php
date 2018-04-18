@@ -192,7 +192,7 @@ if (!function_exists('db')) {
      * @param bool          $force 是否强制重新连接
      * @return \think\db\Query
      */
-    function db($name = '', $config = [], $force = false)
+    function db($name = '', $config = [], $force = true)
     {
         return Db::connect($config, $force)->name($name);
     }
@@ -354,25 +354,22 @@ if (!function_exists('cache')) {
     {
         if (is_array($options)) {
             // 缓存操作的同时初始化
-            $cache = Cache::connect($options);
+            Cache::connect($options);
         } elseif (is_array($name)) {
             // 缓存初始化
             return Cache::connect($name);
-        } else {
-            $cache = Cache::init();
         }
-
         if (is_null($name)) {
-            return $cache->clear($value);
+            return Cache::clear($value);
         } elseif ('' === $value) {
             // 获取缓存
-            return 0 === strpos($name, '?') ? $cache->has(substr($name, 1)) : $cache->get($name);
+            return 0 === strpos($name, '?') ? Cache::has(substr($name, 1)) : Cache::get($name);
         } elseif (is_null($value)) {
             // 删除缓存
-            return $cache->rm($name);
+            return Cache::rm($name);
         } elseif (0 === strpos($name, '?') && '' !== $value) {
             $expire = is_numeric($options) ? $options : null;
-            return $cache->remember(substr($name, 1), $value, $expire);
+            return Cache::remember(substr($name, 1), $value, $expire);
         } else {
             // 缓存数据
             if (is_array($options)) {
@@ -381,9 +378,9 @@ if (!function_exists('cache')) {
                 $expire = is_numeric($options) ? $options : null; //默认快捷缓存设置过期时间
             }
             if (is_null($tag)) {
-                return $cache->set($name, $value, $expire);
+                return Cache::set($name, $value, $expire);
             } else {
-                return $cache->tag($tag)->set($name, $value, $expire);
+                return Cache::tag($tag)->set($name, $value, $expire);
             }
         }
     }
