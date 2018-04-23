@@ -91,14 +91,7 @@ class Tree{
                     }
                 }
             }
-            //剔除数据
-            if(count($filter) > 0){
-                foreach($refer as $key => $data){
-                    foreach ($data as $k => $v) {
-                        if(in_array($k, $filter)) unset($refer[$key][$k]);
-                    }
-                }
-            }
+
         }
         return $tree;
     }
