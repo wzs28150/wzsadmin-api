@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50540
+Source Server         : localhost_3306
+Source Server Version : 50553
 Source Host           : localhost:3306
-Source Database       : thinkphp5
+Source Database       : db_oauth
 
 Target Server Type    : MYSQL
-Target Server Version : 50540
+Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-03-27 11:24:22
+Date: 2018-04-23 16:24:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,6 +28,7 @@ CREATE TABLE `oa_admin_access` (
 -- Records of oa_admin_access
 -- ----------------------------
 INSERT INTO `oa_admin_access` VALUES ('2', '15');
+INSERT INTO `oa_admin_access` VALUES ('4', '15');
 
 -- ----------------------------
 -- Table structure for oa_admin_group
@@ -71,7 +72,7 @@ CREATE TABLE `oa_admin_menu` (
 -- Records of oa_admin_menu
 -- ----------------------------
 INSERT INTO `oa_admin_menu` VALUES ('52', '0', '管理', '', '', '1', '0', '1', '59', 'Administrative', '');
-INSERT INTO `oa_admin_menu` VALUES ('53', '52', '系统配置', '', '', '1', '0', '1', '61', 'Administrative', '');
+INSERT INTO `oa_admin_menu` VALUES ('53', '52', '系统配置', '', 'fa-cogs', '1', '0', '1', '61', 'Administrative', '');
 INSERT INTO `oa_admin_menu` VALUES ('54', '53', '菜单管理', '/home/menu/list', '', '1', '0', '1', '21', 'Administrative', 'menu');
 INSERT INTO `oa_admin_menu` VALUES ('55', '53', '系统参数', '/home/config/add', '', '1', '0', '1', '29', 'Administrative', 'systemConfig');
 INSERT INTO `oa_admin_menu` VALUES ('56', '53', '权限规则', '/home/rule/list', '', '1', '0', '1', '13', 'Administrative', 'rule');
@@ -79,7 +80,7 @@ INSERT INTO `oa_admin_menu` VALUES ('57', '52', '组织架构', '', '', '1', '0'
 INSERT INTO `oa_admin_menu` VALUES ('58', '57', '岗位管理', '/home/position/list', '', '1', '0', '1', '31', 'Administrative', 'position');
 INSERT INTO `oa_admin_menu` VALUES ('59', '57', '部门管理', '/home/structures/list', '', '1', '0', '1', '39', 'Administrative', 'structures');
 INSERT INTO `oa_admin_menu` VALUES ('60', '57', '用户组管理', '/home/groups/list', '', '1', '0', '1', '47', 'Administrative', 'groups');
-INSERT INTO `oa_admin_menu` VALUES ('61', '52', '账户管理', '', '', '1', '0', '1', '62', 'Administrative', '');
+INSERT INTO `oa_admin_menu` VALUES ('61', '52', '账户管理', '', 'fa-users', '1', '0', '1', '62', 'Administrative', '');
 INSERT INTO `oa_admin_menu` VALUES ('62', '61', '账户列表', '/home/users/list', '', '1', '0', '1', '55', 'Administrative', 'users');
 
 -- ----------------------------
@@ -224,13 +225,14 @@ CREATE TABLE `oa_admin_user` (
   `post_id` int(11) DEFAULT NULL COMMENT '岗位',
   `status` tinyint(3) DEFAULT NULL COMMENT '状态,1启用0禁用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of oa_admin_user
 -- ----------------------------
 INSERT INTO `oa_admin_user` VALUES ('1', 'admin', 'd93a5def7511da3d0f2d171d9c344e91', '', null, '超级管理员', '1', '5', '1');
 INSERT INTO `oa_admin_user` VALUES ('3', '用户AAAA', 'c78b6663d47cfbdb4d65ea51c104044e', '', '1487217060', '用户A', '5', '20', '1');
+INSERT INTO `oa_admin_user` VALUES ('4', 'wzs28150', 'd93a5def7511da3d0f2d171d9c344e91', '', '1524018248', 'wzs', '5', null, '1');
 
 -- ----------------------------
 -- Table structure for oa_system_config
@@ -249,7 +251,7 @@ CREATE TABLE `oa_system_config` (
 -- ----------------------------
 -- Records of oa_system_config
 -- ----------------------------
-INSERT INTO `oa_system_config` VALUES ('1', 'SYSTEM_NAME', 'VueThink通用后台登录', '0', '1');
+INSERT INTO `oa_system_config` VALUES ('1', 'SYSTEM_NAME', 'CoolThink通用后台登录', '0', '1');
 INSERT INTO `oa_system_config` VALUES ('2', 'SYSTEM_LOGO', 'uploads\\20170219\\d9fe7b784e1b1f406234b7b301e627e8.png', '0', '1');
-INSERT INTO `oa_system_config` VALUES ('3', 'LOGIN_SESSION_VALID', '1644', '0', '1');
+INSERT INTO `oa_system_config` VALUES ('3', 'LOGIN_SESSION_VALID', '1600', '0', '1');
 INSERT INTO `oa_system_config` VALUES ('4', 'IDENTIFYING_CODE', '0', '0', '1');
