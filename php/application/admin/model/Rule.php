@@ -6,10 +6,10 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\model;
-
+use think\Db;
 use app\admin\model\Common;
 
-class Rule extends Common 
+class Rule extends Common
 {
 
     /**
@@ -22,21 +22,31 @@ class Rule extends Common
 	 * @linchuangbin
 	 * @DateTime  2017-02-10T21:07:18+0800
 	 * @param     string                   $type [是否为树状结构]
-	 * @return    [array]                         
+	 * @return    [array]
 	 */
 	public function getDataList($type = '')
 	{
-		$cat = new \com\Category('admin_rule', array('id', 'pid', 'title', 'title'));
-		$data = $cat->getList('', 0, 'id');
+		if ($type == 'tree') {
+			$data = Db::name('admin_rule')->field('id,pid,title as label,name,level,status')->where($map)->select();
+		}else{
+			$cat = new \com\Category('admin_rule', array('id', 'pid', 'title', 'name','status'));
+			$data = $cat->getList('', 0, 'id');
+			dump($data);
+		}
 		// 若type为tree，则返回树状结构
 		if ($type == 'tree') {
 			foreach ($data as $k => $v) {
 				$data[$k]['check'] = false;
+				if($v['status'] == 1){
+					$data[$k]['status'] = true;
+				}else{
+					$data[$k]['status'] = false;
+				}
 			}
 			$tree = new \com\Tree();
-			$data = $tree->list_to_tree($data, 'id', 'pid', 'child', 0, true, array('pid'));
+			$data = $tree->list_to_tree($data, 'id', 'pid', 'children', 0, true, array('pid'));
 		}
-		
+
 		return $data;
 	}
 
