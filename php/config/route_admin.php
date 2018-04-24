@@ -46,6 +46,8 @@ return [
 	'admin/users/enables' => ['admin/users/enables', ['method' => 'POST']],
 	// 【菜单】批量删除
 	'admin/menus/deletes' => ['admin/menus/deletes', ['method' => 'POST']],
+  // 【菜单】启用/禁用
+	'admin/menus/enable' => ['admin/menus/enable', ['method' => 'POST']],
 	// 【菜单】批量启用/禁用
 	'admin/menus/enables' => ['admin/menus/enables', ['method' => 'POST']],
 	// 【组织架构】批量删除
@@ -56,7 +58,7 @@ return [
 	'admin/posts/deletes' => ['admin/posts/deletes', ['method' => 'POST']],
 	// 【部门】批量启用/禁用
 	'admin/posts/enables' => ['admin/posts/enables', ['method' => 'POST']],
-	
+
 	// MISS路由
 	'__miss__'  => 'admin/base/miss',
 ];

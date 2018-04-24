@@ -73,7 +73,16 @@ class Menus extends ApiCommon
         }
         return resultArray(['data' => '删除成功']);
     }
-
+    public function enable()
+    {
+        $menuModel = model('Menu');
+        $param = $this->param;
+        $data = $menuModel->enableData($param['id'], $param['status'], false);
+        if (!$data) {
+            return resultArray(['error' => $menuModel->getError()]);
+        }
+        return resultArray(['data' => '操作成功']);
+    }
     public function enables()
     {
         $menuModel = model('Menu');

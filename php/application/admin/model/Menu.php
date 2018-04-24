@@ -104,7 +104,7 @@ class Menu extends Common
       protected function getMenuAndRule($u_id)
       {
       	if ($u_id === 1) {
-              $map['status'] = 1;
+              // $map['status'] = 1;
       		    $menusList = Db::name('admin_menu')->field('id,pid,title as label,url,status')->where($map)->order('sort asc')->select();
               foreach($menusList as $k => $v) {
                 if($v['status'] == 1){

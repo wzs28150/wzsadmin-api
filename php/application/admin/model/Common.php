@@ -9,15 +9,15 @@ namespace app\admin\model;
 
 use think\Model;
 
-class Common extends Model 
+class Common extends Model
 {
-	
+
 	/**
 	 * [getDataById 根据主键获取详情]
 	 * @linchuangbin
 	 * @DateTime  2017-02-10T21:16:34+0800
 	 * @param     string                   $id [主键]
-	 * @return    [array]                       
+	 * @return    [array]
 	 */
 	public function getDataById($id = '')
 	{
@@ -38,7 +38,7 @@ class Common extends Model
 	 */
 	public function createData($param)
 	{
-		
+
 		// 验证
 		$validate = validate($this->name);
 		if (!$validate->check($param)) {
@@ -113,7 +113,7 @@ class Common extends Model
 			$this->error = '删除失败';
 			$this->rollback();
 			return false;
-		}		
+		}
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Common extends Model
 			$this->error = '删除失败';
 			return false;
 		}
-		
+
 		// 查找所有子元素
 		if ($delSon) {
 			foreach ($ids as $k => $v) {
@@ -147,10 +147,42 @@ class Common extends Model
 		} catch (\Exception $e) {
 			$this->error = '操作失败';
 			return false;
-		}		
+		}
 
 	}
 
+	/**
+	 * [enableData 启用、禁用]
+	 * @AuthorHTL
+	 * @DateTime  2017-02-11T21:01:58+0800
+	 * @param     string                   $ids    [主键数组]
+	 * @param     integer                  $status [状态1启用0禁用]
+	 * @param     [boolean]                $delSon [是否删除子孙数组]
+	 * @return    [type]                           [description]
+	 */
+	public function enableData($id, $status = 1, $delSon = false)
+	{
+		if (empty($id)) {
+			$this->error = '删除失败';
+			return false;
+		}
+
+		// 查找所有子元素
+		if ($delSon && $status === '0') {
+			foreach ($id as $k => $v) {
+				$childIds = $this->getAllChild($v);
+				$ids = array_merge($id, $childIds);
+			}
+			$ids = array_unique($id);
+		}
+		try {
+			$this->where($this->getPk(),$id)->setField('status', $status);
+			return true;
+		} catch (\Exception $e) {
+			$this->error = '操作失败';
+			return false;
+		}
+	}
 	/**
 	 * [enableDatas 批量启用、禁用]
 	 * @AuthorHTL
@@ -198,6 +230,6 @@ class Common extends Model
 			}
 		}
 		return $data;
-	}		
+	}
 
 }
