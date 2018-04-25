@@ -18,13 +18,13 @@ class User extends Common
      * 为了数据库的整洁，同时又不影响Model和Controller的名称
      * 我们约定每个模块的数据表都加上相同的前缀，比如微信模块用weixin作为数据表前缀
      */
-	protected $name = 'admin_user';
+		protected $name = 'admin_user';
     protected $createTime = 'create_time';
     protected $updateTime = false;
-	protected $autoWriteTimestamp = true;
-	protected $insert = [
-		'status' => 1,
-	];
+		protected $autoWriteTimestamp = true;
+		protected $insert = [
+			'status' => 1,
+		];
 	/**
 	 * 获取用户所属所有用户组
 	 * @param  array   $param  [description]
@@ -58,6 +58,8 @@ class User extends Common
 				->where($map)
 				->alias('user')
 				->join('__ADMIN_STRUCTURE__ structure', 'structure.id=user.structure_id', 'LEFT')
+				->join('__ADMIN_ACCESS__ access', 'access.user_id=user.id', 'LEFT')
+				->join('__ADMIN_GROUP__ group', 'group.id=access.group_id', 'LEFT')
 				->join('__ADMIN_POST__ post', 'post.id=user.post_id', 'LEFT');
 
 		// 若有分页
@@ -66,7 +68,7 @@ class User extends Common
 		}
 
 		$list = $list
-				->field('user.*,structure.name as s_name, post.name as p_name')
+				->field('user.*,structure.name as s_name, post.name as p_name,access.group_id,group.title as a_name')->fetchSql(false)
 				->select();
 
 		$data['list'] = $list;

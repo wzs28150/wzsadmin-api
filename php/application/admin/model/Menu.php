@@ -24,11 +24,14 @@ class Menu extends Common
 	 * @DateTime  2017-02-10T21:07:18+0800
 	 * @return    [array]
 	 */
-	public function getDataList()
+	public function getDataList($type = '')
 	{
-        $cat = new \com\Category('admin_menu', array('id', 'pid', 'title', 'title'));
-        // $data = $cat->getList('', 0, 'sort');
-        $data = $this->getMenuAndRule(1);
+    if($type == 'tree'){
+      $cat = new \com\Category('admin_menu', array('id', 'pid', 'title', 'title'));
+      $data = $cat->getList('', 0, 'sort');
+    }else{
+      $data = $this->getMenuAndRule(1);
+    }
 		return $data;
 	}
 
@@ -144,6 +147,7 @@ class Menu extends Common
           //处理菜单成树状
           $tree = new \com\Tree();
           $ret = $tree->list_to_tree($menusList, 'id', 'pid', 'children', 0, true);
+          $ret = memuLevelClear($ret);
           //$ret = memuLevelClear($ret);
           // // 处理规则成树状
           // $ret['rulesList'] = $tree->list_to_tree($rules, 'id', 'pid', 'child', 0, true, array('pid'));

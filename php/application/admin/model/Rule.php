@@ -31,7 +31,7 @@ class Rule extends Common
 		}else{
 			$cat = new \com\Category('admin_rule', array('id', 'pid', 'title', 'name','status'));
 			$data = $cat->getList('', 0, 'id');
-			dump($data);
+			// dump($data);
 		}
 		// 若type为tree，则返回树状结构
 		if ($type == 'tree') {

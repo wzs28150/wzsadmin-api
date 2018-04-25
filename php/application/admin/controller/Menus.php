@@ -14,8 +14,8 @@ class Menus extends ApiCommon
     {
         $menuModel = model('Menu');
         $param = $this->param;
-        // dump($param);
-        $data = $menuModel->getDataList();
+        $type = !empty($param['type'])? $param['type']: '';
+        $data = $menuModel->getDataList($type);
         return resultArray(['data' => $data]);
     }
 
