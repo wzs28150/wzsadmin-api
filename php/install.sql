@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-04-23 16:24:46
+Date: 2018-04-26 10:24:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,6 +28,7 @@ CREATE TABLE `oa_admin_access` (
 -- Records of oa_admin_access
 -- ----------------------------
 INSERT INTO `oa_admin_access` VALUES ('2', '15');
+INSERT INTO `oa_admin_access` VALUES ('3', '15');
 INSERT INTO `oa_admin_access` VALUES ('4', '15');
 
 -- ----------------------------
@@ -66,22 +67,25 @@ CREATE TABLE `oa_admin_menu` (
   `module` varchar(50) DEFAULT NULL,
   `menu` varchar(50) DEFAULT NULL COMMENT '三级菜单吗',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8 COMMENT='【配置】后台菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COMMENT='【配置】后台菜单表';
 
 -- ----------------------------
 -- Records of oa_admin_menu
 -- ----------------------------
 INSERT INTO `oa_admin_menu` VALUES ('52', '0', '管理', '', '', '1', '0', '1', '59', 'Administrative', '');
-INSERT INTO `oa_admin_menu` VALUES ('53', '52', '系统配置', '', 'fa-cogs', '1', '0', '1', '61', 'Administrative', '');
+INSERT INTO `oa_admin_menu` VALUES ('53', '52', '系统配置', '', 'fa-cogs', '1', '1', '1', '61', 'Administrative', '');
 INSERT INTO `oa_admin_menu` VALUES ('54', '53', '菜单管理', '/home/menu/list', '', '1', '0', '1', '21', 'Administrative', 'menu');
 INSERT INTO `oa_admin_menu` VALUES ('55', '53', '系统参数', '/home/config/add', '', '1', '0', '1', '29', 'Administrative', 'systemConfig');
 INSERT INTO `oa_admin_menu` VALUES ('56', '53', '权限规则', '/home/rule/list', '', '1', '0', '1', '13', 'Administrative', 'rule');
-INSERT INTO `oa_admin_menu` VALUES ('57', '52', '组织架构', '', '', '1', '0', '1', '63', 'Administrative', '');
+INSERT INTO `oa_admin_menu` VALUES ('57', '52', '组织架构', '', '', '1', '3', '1', '63', 'Administrative', '');
 INSERT INTO `oa_admin_menu` VALUES ('58', '57', '岗位管理', '/home/position/list', '', '1', '0', '1', '31', 'Administrative', 'position');
 INSERT INTO `oa_admin_menu` VALUES ('59', '57', '部门管理', '/home/structures/list', '', '1', '0', '1', '39', 'Administrative', 'structures');
 INSERT INTO `oa_admin_menu` VALUES ('60', '57', '用户组管理', '/home/groups/list', '', '1', '0', '1', '47', 'Administrative', 'groups');
-INSERT INTO `oa_admin_menu` VALUES ('61', '52', '账户管理', '', 'fa-users', '1', '0', '1', '62', 'Administrative', '');
+INSERT INTO `oa_admin_menu` VALUES ('61', '52', '账户管理', '', 'fa-users', '1', '2', '1', '62', 'Administrative', '');
 INSERT INTO `oa_admin_menu` VALUES ('62', '61', '账户列表', '/home/users/list', '', '1', '0', '1', '55', 'Administrative', 'users');
+INSERT INTO `oa_admin_menu` VALUES ('64', '52', '产品管理', '', 'fa-shopping-bag', '1', '4', '1', '65', 'Administrative', '');
+INSERT INTO `oa_admin_menu` VALUES ('65', '64', '产品列表', '/home/products/list', '', '1', '0', '1', '67', 'Administrative', 'products');
+INSERT INTO `oa_admin_menu` VALUES ('66', '52', '仪表盘', '/home/dashboard/index', 'fa-tachometer', '2', '0', '1', '10', 'Administrative', 'dashboard');
 
 -- ----------------------------
 -- Table structure for oa_admin_post
@@ -127,7 +131,7 @@ CREATE TABLE `oa_admin_rule` (
   `pid` int(11) DEFAULT '0' COMMENT '父id，默认0',
   `status` tinyint(3) DEFAULT '1' COMMENT '状态，1启用，0禁用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of oa_admin_rule
@@ -151,22 +155,6 @@ INSERT INTO `oa_admin_rule` VALUES ('26', '批量删除菜单', 'deletes', '3', 
 INSERT INTO `oa_admin_rule` VALUES ('27', '批量启用/禁用菜单', 'enables', '3', '20', '1');
 INSERT INTO `oa_admin_rule` VALUES ('28', '系统管理', 'systemConfigs', '2', '10', '1');
 INSERT INTO `oa_admin_rule` VALUES ('29', '修改系统配置', 'save', '3', '28', '1');
-INSERT INTO `oa_admin_rule` VALUES ('30', '岗位管理', 'posts', '2', '10', '1');
-INSERT INTO `oa_admin_rule` VALUES ('31', '岗位列表', 'index', '3', '30', '1');
-INSERT INTO `oa_admin_rule` VALUES ('32', '岗位详情', 'read', '3', '30', '1');
-INSERT INTO `oa_admin_rule` VALUES ('33', '编辑岗位', 'update', '3', '30', '1');
-INSERT INTO `oa_admin_rule` VALUES ('34', '删除岗位', 'delete', '3', '30', '1');
-INSERT INTO `oa_admin_rule` VALUES ('35', '添加岗位', 'save', '3', '30', '1');
-INSERT INTO `oa_admin_rule` VALUES ('36', '批量删除岗位', 'deletes', '3', '30', '1');
-INSERT INTO `oa_admin_rule` VALUES ('37', '批量启用/禁用岗位', 'enables', '3', '30', '1');
-INSERT INTO `oa_admin_rule` VALUES ('38', '部门管理', 'structures', '2', '10', '1');
-INSERT INTO `oa_admin_rule` VALUES ('39', '部门列表', 'index', '3', '38', '1');
-INSERT INTO `oa_admin_rule` VALUES ('40', '部门详情', 'read', '3', '38', '1');
-INSERT INTO `oa_admin_rule` VALUES ('41', '编辑部门', 'update', '3', '38', '1');
-INSERT INTO `oa_admin_rule` VALUES ('42', '删除部门', 'delete', '3', '38', '1');
-INSERT INTO `oa_admin_rule` VALUES ('43', '添加部门', 'save', '3', '38', '1');
-INSERT INTO `oa_admin_rule` VALUES ('44', '批量删除部门', 'deletes', '3', '38', '1');
-INSERT INTO `oa_admin_rule` VALUES ('45', '批量启用/禁用部门', 'enables', '3', '38', '1');
 INSERT INTO `oa_admin_rule` VALUES ('46', '用户组管理', 'groups', '2', '10', '1');
 INSERT INTO `oa_admin_rule` VALUES ('47', '用户组列表', 'index', '3', '46', '1');
 INSERT INTO `oa_admin_rule` VALUES ('48', '用户组详情', 'read', '3', '46', '1');
@@ -183,6 +171,12 @@ INSERT INTO `oa_admin_rule` VALUES ('59', '管理菜单', 'Adminstrative', '2', 
 INSERT INTO `oa_admin_rule` VALUES ('61', '系统管理二级菜单', 'systemConfig', '1', '59', '1');
 INSERT INTO `oa_admin_rule` VALUES ('62', '账户管理二级菜单', 'personnel', '3', '59', '1');
 INSERT INTO `oa_admin_rule` VALUES ('63', '组织架构二级菜单', 'structures', '3', '59', '1');
+INSERT INTO `oa_admin_rule` VALUES ('65', '产品管理', 'products', '2', '10', '1');
+INSERT INTO `oa_admin_rule` VALUES ('67', '产品列表', 'index', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('68', '添加产品', 'save', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('69', '产品详情', 'read', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('70', '编辑商品', 'update', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('71', '删除商品', 'delete', '3', '65', '1');
 
 -- ----------------------------
 -- Table structure for oa_admin_structure

@@ -10,7 +10,6 @@ namespace app\admin\model;
 use think\Db;
 use app\admin\model\Common;
 use com\verify\HonrayVerify;
-
 class User extends Common
 {
 
@@ -57,10 +56,8 @@ class User extends Common
 		$list = $this
 				->where($map)
 				->alias('user')
-				->join('__ADMIN_STRUCTURE__ structure', 'structure.id=user.structure_id', 'LEFT')
 				->join('__ADMIN_ACCESS__ access', 'access.user_id=user.id', 'LEFT')
-				->join('__ADMIN_GROUP__ group', 'group.id=access.group_id', 'LEFT')
-				->join('__ADMIN_POST__ post', 'post.id=user.post_id', 'LEFT');
+				->join('__ADMIN_GROUP__ group', 'group.id=access.group_id', 'LEFT');
 
 		// 若有分页
 		if ($page && $limit) {
@@ -68,7 +65,7 @@ class User extends Common
 		}
 
 		$list = $list
-				->field('user.*,structure.name as s_name, post.name as p_name,access.group_id,group.title as a_name')->fetchSql(false)
+				->field('user.*,access.group_id,group.title as a_name')->fetchSql(false)
 				->select();
 
 		$data['list'] = $list;
@@ -100,10 +97,10 @@ class User extends Common
 	 */
 	public function createData($param)
 	{
-		if (empty($param['groups'])) {
-			$this->error = '请至少勾选一个用户组';
-			return false;
-		}
+		// if (empty($param['groups'])) {
+		// 	$this->error = '请至少勾选一个用户组';
+		// 	return false;
+		// }
 
 		// 验证
 		$validate = validate($this->name);
@@ -214,12 +211,12 @@ class User extends Common
 		$map['username'] = $username;
 		$userInfo = $this->where($map)->find();
     	if (!$userInfo) {
-			$this->error = '帐号不存在';
-			return false;
+				$this->error = '帐号不存在';
+				return false;
     	}
     	if (user_md5($password) !== $userInfo['password']) {
-			$this->error = '密码错误';
-			return false;
+				$this->error = '密码错误';
+				return false;
     	}
     	if ($userInfo['status'] === 0) {
   			$this->error = '帐号已被禁用';
@@ -313,14 +310,14 @@ class User extends Common
     protected function getMenuAndRule($u_id)
     {
     	if ($u_id === 1) {
-            $map['status'] = 1;
+        $map['status'] = 1;
     		$menusList = Db::name('admin_menu')->where($map)->order('sort asc')->select();
     	} else {
-    		$groups = $this->get($u_id)->groups;
-            $ruleIds = [];
-    		foreach($groups as $k => $v) {
-    			$ruleIds = array_unique(array_merge($ruleIds, explode(',', $v['rules'])));
-    		}
+		    		$groups = $this->get($u_id)->groups;
+		            $ruleIds = [];
+		    		foreach($groups as $k => $v) {
+		    			$ruleIds = array_unique(array_merge($ruleIds, explode(',', $v['rules'])));
+		    		}
 
             $ruleMap['id'] = array('in', $ruleIds);
             $ruleMap['status'] = 1;
@@ -331,17 +328,19 @@ class User extends Common
             	$rules[$k]['name'] = strtolower($v['name']);
             }
             empty($ruleIds)&&$ruleIds = '';
-    		$menuMap['status'] = 1;
+    				$menuMap['status'] = 1;
             $menuMap['rule_id'] = array('in',$ruleIds);
             $menusList = Db::name('admin_menu')->where($menuMap)->order('sort asc')->select();
         }
-        if (!$menusList) {
+    	if (!$menusList) {
             return null;
-        }
+      }
         //处理菜单成树状
         $tree = new \com\Tree();
         $ret['menusList'] = $tree->list_to_tree($menusList, 'id', 'pid', 'child', 0, true, array('pid'));
-        $ret['menusList'] = memuLevelClear($ret['menusList']);
+
+        // $ret['menusList'] = memuLevelClear($ret['menusList']);
+				// dump($ret['menusList']);
         // 处理规则成树状
         $ret['rulesList'] = $tree->list_to_tree($rules, 'id', 'pid', 'child', 0, true, array('pid'));
         $ret['rulesList'] = rulesDeal($ret['rulesList']);
