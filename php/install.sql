@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-04-26 10:24:25
+Date: 2018-04-26 16:45:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,8 +28,8 @@ CREATE TABLE `oa_admin_access` (
 -- Records of oa_admin_access
 -- ----------------------------
 INSERT INTO `oa_admin_access` VALUES ('2', '15');
-INSERT INTO `oa_admin_access` VALUES ('3', '15');
 INSERT INTO `oa_admin_access` VALUES ('4', '15');
+INSERT INTO `oa_admin_access` VALUES ('3', '15');
 
 -- ----------------------------
 -- Table structure for oa_admin_group
@@ -48,7 +48,7 @@ CREATE TABLE `oa_admin_group` (
 -- ----------------------------
 -- Records of oa_admin_group
 -- ----------------------------
-INSERT INTO `oa_admin_group` VALUES ('15', '普通会员', '1,2,3,4,5,6,7,8,9,10,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,59,61,62,63,28,29', '0', '最厉害的组别', '1');
+INSERT INTO `oa_admin_group` VALUES ('15', '超级管理员', '1,2,3,4,5,6,7,8,9,10,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,59,61,62,63,28,29,11,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,65,67,68,69,70,71', '0', '最厉害的组别', '1');
 
 -- ----------------------------
 -- Table structure for oa_admin_menu
@@ -72,19 +72,16 @@ CREATE TABLE `oa_admin_menu` (
 -- ----------------------------
 -- Records of oa_admin_menu
 -- ----------------------------
-INSERT INTO `oa_admin_menu` VALUES ('52', '0', '管理', '', '', '1', '0', '1', '59', 'Administrative', '');
+INSERT INTO `oa_admin_menu` VALUES ('52', '0', '系统管理', '', '', '1', '0', '1', '59', 'Administrative', '');
 INSERT INTO `oa_admin_menu` VALUES ('53', '52', '系统配置', '', 'fa-cogs', '1', '1', '1', '61', 'Administrative', '');
 INSERT INTO `oa_admin_menu` VALUES ('54', '53', '菜单管理', '/home/menu/list', '', '1', '0', '1', '21', 'Administrative', 'menu');
 INSERT INTO `oa_admin_menu` VALUES ('55', '53', '系统参数', '/home/config/add', '', '1', '0', '1', '29', 'Administrative', 'systemConfig');
 INSERT INTO `oa_admin_menu` VALUES ('56', '53', '权限规则', '/home/rule/list', '', '1', '0', '1', '13', 'Administrative', 'rule');
-INSERT INTO `oa_admin_menu` VALUES ('57', '52', '组织架构', '', '', '1', '3', '1', '63', 'Administrative', '');
-INSERT INTO `oa_admin_menu` VALUES ('58', '57', '岗位管理', '/home/position/list', '', '1', '0', '1', '31', 'Administrative', 'position');
-INSERT INTO `oa_admin_menu` VALUES ('59', '57', '部门管理', '/home/structures/list', '', '1', '0', '1', '39', 'Administrative', 'structures');
-INSERT INTO `oa_admin_menu` VALUES ('60', '57', '用户组管理', '/home/groups/list', '', '1', '0', '1', '47', 'Administrative', 'groups');
+INSERT INTO `oa_admin_menu` VALUES ('60', '61', '用户组管理', '/home/groups/list', '', '1', '0', '1', '47', 'Administrative', 'groups');
 INSERT INTO `oa_admin_menu` VALUES ('61', '52', '账户管理', '', 'fa-users', '1', '2', '1', '62', 'Administrative', '');
 INSERT INTO `oa_admin_menu` VALUES ('62', '61', '账户列表', '/home/users/list', '', '1', '0', '1', '55', 'Administrative', 'users');
-INSERT INTO `oa_admin_menu` VALUES ('64', '52', '产品管理', '', 'fa-shopping-bag', '1', '4', '1', '65', 'Administrative', '');
-INSERT INTO `oa_admin_menu` VALUES ('65', '64', '产品列表', '/home/products/list', '', '1', '0', '1', '67', 'Administrative', 'products');
+INSERT INTO `oa_admin_menu` VALUES ('64', '0', '应用管理', '/products', 'fa-shopping-bag', '1', '4', '1', '65', 'Products', '');
+INSERT INTO `oa_admin_menu` VALUES ('65', '64', '应用列表', '/products/products/list', '', '1', '0', '1', '67', 'Products', 'products');
 INSERT INTO `oa_admin_menu` VALUES ('66', '52', '仪表盘', '/home/dashboard/index', 'fa-tachometer', '2', '0', '1', '10', 'Administrative', 'dashboard');
 
 -- ----------------------------
@@ -131,7 +128,7 @@ CREATE TABLE `oa_admin_rule` (
   `pid` int(11) DEFAULT '0' COMMENT '父id，默认0',
   `status` tinyint(3) DEFAULT '1' COMMENT '状态，1启用，0禁用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of oa_admin_rule
@@ -163,20 +160,17 @@ INSERT INTO `oa_admin_rule` VALUES ('50', '删除用户组', 'delete', '3', '46'
 INSERT INTO `oa_admin_rule` VALUES ('51', '添加用户组', 'save', '3', '46', '1');
 INSERT INTO `oa_admin_rule` VALUES ('52', '批量删除用户组', 'deletes', '3', '46', '1');
 INSERT INTO `oa_admin_rule` VALUES ('53', '批量启用/禁用用户组', 'enables', '3', '46', '1');
-INSERT INTO `oa_admin_rule` VALUES ('54', '成员管理', 'users', '2', '10', '1');
-INSERT INTO `oa_admin_rule` VALUES ('55', '成员列表', 'index', '3', '54', '1');
-INSERT INTO `oa_admin_rule` VALUES ('56', '成员详情', 'read', '3', '54', '1');
-INSERT INTO `oa_admin_rule` VALUES ('57', '删除成员', 'delete', '3', '54', '1');
 INSERT INTO `oa_admin_rule` VALUES ('59', '管理菜单', 'Adminstrative', '2', '10', '1');
 INSERT INTO `oa_admin_rule` VALUES ('61', '系统管理二级菜单', 'systemConfig', '1', '59', '1');
 INSERT INTO `oa_admin_rule` VALUES ('62', '账户管理二级菜单', 'personnel', '3', '59', '1');
 INSERT INTO `oa_admin_rule` VALUES ('63', '组织架构二级菜单', 'structures', '3', '59', '1');
-INSERT INTO `oa_admin_rule` VALUES ('65', '产品管理', 'products', '2', '10', '1');
-INSERT INTO `oa_admin_rule` VALUES ('67', '产品列表', 'index', '3', '65', '1');
-INSERT INTO `oa_admin_rule` VALUES ('68', '添加产品', 'save', '3', '65', '1');
-INSERT INTO `oa_admin_rule` VALUES ('69', '产品详情', 'read', '3', '65', '1');
-INSERT INTO `oa_admin_rule` VALUES ('70', '编辑商品', 'update', '3', '65', '1');
-INSERT INTO `oa_admin_rule` VALUES ('71', '删除商品', 'delete', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('65', '应用管理', 'products', '2', '0', '1');
+INSERT INTO `oa_admin_rule` VALUES ('67', '应用列表', 'index', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('68', '添加应用', 'save', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('69', '应用详情', 'read', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('70', '编辑应用', 'update', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('71', '删除应用', 'delete', '3', '65', '1');
+INSERT INTO `oa_admin_rule` VALUES ('72', '公众号', 'weChat', '2', '0', '1');
 
 -- ----------------------------
 -- Table structure for oa_admin_structure
@@ -215,18 +209,17 @@ CREATE TABLE `oa_admin_user` (
   `remark` varchar(100) DEFAULT NULL COMMENT '用户备注',
   `create_time` int(11) DEFAULT NULL,
   `realname` varchar(100) DEFAULT NULL COMMENT '真实姓名',
-  `structure_id` int(11) DEFAULT NULL COMMENT '部门',
   `post_id` int(11) DEFAULT NULL COMMENT '岗位',
   `status` tinyint(3) DEFAULT NULL COMMENT '状态,1启用0禁用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of oa_admin_user
 -- ----------------------------
-INSERT INTO `oa_admin_user` VALUES ('1', 'admin', 'd93a5def7511da3d0f2d171d9c344e91', '', null, '超级管理员', '1', '5', '1');
-INSERT INTO `oa_admin_user` VALUES ('3', '用户AAAA', 'c78b6663d47cfbdb4d65ea51c104044e', '', '1487217060', '用户A', '5', '20', '1');
-INSERT INTO `oa_admin_user` VALUES ('4', 'wzs28150', 'd93a5def7511da3d0f2d171d9c344e91', '', '1524018248', 'wzs', '5', null, '1');
+INSERT INTO `oa_admin_user` VALUES ('1', 'admin', 'd93a5def7511da3d0f2d171d9c344e91', '', null, '超级管理员', '5', '1');
+INSERT INTO `oa_admin_user` VALUES ('3', '用户AAAA', 'c78b6663d47cfbdb4d65ea51c104044e', '', '1487217060', '用户A', '20', '1');
+INSERT INTO `oa_admin_user` VALUES ('4', 'wzs28150', 'd93a5def7511da3d0f2d171d9c344e91', '', '1524018248', 'wzs', null, '1');
 
 -- ----------------------------
 -- Table structure for oa_system_config
