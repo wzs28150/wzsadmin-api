@@ -222,6 +222,8 @@ class User extends Common
   			$this->error = '帐号已被禁用';
   			return false;
     	}
+				$grouo_id = DB::table('__ADMIN_ACCESS__')->field('group_id')->find($userInfo['id']);
+				$userInfo['group_id'] = $grouo_id['group_id'];
         // 获取菜单和权限
         $dataList = $this->getMenuAndRule($userInfo['id']);
 
