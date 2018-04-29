@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-04-26 16:45:53
+Date: 2018-04-29 13:05:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,7 +48,7 @@ CREATE TABLE `oa_admin_group` (
 -- ----------------------------
 -- Records of oa_admin_group
 -- ----------------------------
-INSERT INTO `oa_admin_group` VALUES ('15', '超级管理员', '1,2,3,4,5,6,7,8,9,10,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,59,61,62,63,28,29,11,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,65,67,68,69,70,71', '0', '最厉害的组别', '1');
+INSERT INTO `oa_admin_group` VALUES ('15', '超级管理员', '1,2,3,4,5,6,7,8,9,10,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,59,61,62,63,28,29,11,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,65,67,68,69,70,71,72', '0', '最厉害的组别', '1');
 
 -- ----------------------------
 -- Table structure for oa_admin_menu
@@ -67,7 +67,7 @@ CREATE TABLE `oa_admin_menu` (
   `module` varchar(50) DEFAULT NULL,
   `menu` varchar(50) DEFAULT NULL COMMENT '三级菜单吗',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COMMENT='【配置】后台菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8 COMMENT='【配置】后台菜单表';
 
 -- ----------------------------
 -- Records of oa_admin_menu
@@ -80,9 +80,15 @@ INSERT INTO `oa_admin_menu` VALUES ('56', '53', '权限规则', '/home/rule/list
 INSERT INTO `oa_admin_menu` VALUES ('60', '61', '用户组管理', '/home/groups/list', '', '1', '0', '1', '47', 'Administrative', 'groups');
 INSERT INTO `oa_admin_menu` VALUES ('61', '52', '账户管理', '', 'fa-users', '1', '2', '1', '62', 'Administrative', '');
 INSERT INTO `oa_admin_menu` VALUES ('62', '61', '账户列表', '/home/users/list', '', '1', '0', '1', '55', 'Administrative', 'users');
-INSERT INTO `oa_admin_menu` VALUES ('64', '0', '应用管理', '/products', 'fa-shopping-bag', '1', '4', '1', '65', 'Products', '');
-INSERT INTO `oa_admin_menu` VALUES ('65', '64', '应用列表', '/products/products/list', '', '1', '0', '1', '67', 'Products', 'products');
+INSERT INTO `oa_admin_menu` VALUES ('64', '0', '应用管理', '', 'fa-shopping-bag', '1', '1', '1', '65', 'Products', '');
+INSERT INTO `oa_admin_menu` VALUES ('65', '64', '应用列表', '/products/products/list', 'fa-shopping-bag', '2', '0', '1', '67', 'Products', 'products');
 INSERT INTO `oa_admin_menu` VALUES ('66', '52', '仪表盘', '/home/dashboard/index', 'fa-tachometer', '2', '0', '1', '10', 'Administrative', 'dashboard');
+INSERT INTO `oa_admin_menu` VALUES ('67', '0', '公众号', '', '', '1', '2', '1', '72', 'Wechat', '');
+INSERT INTO `oa_admin_menu` VALUES ('68', '0', 'PC', '', '', '1', '3', '1', '73', 'Pc', '');
+INSERT INTO `oa_admin_menu` VALUES ('69', '0', '小程序', '', '', '1', '4', '1', '74', 'Weapp', '');
+INSERT INTO `oa_admin_menu` VALUES ('70', '67', '公众号列表', '/wechat/wechat/list', 'fa-wechat', '2', '0', '1', '75', 'Wechat', 'wechat');
+INSERT INTO `oa_admin_menu` VALUES ('71', '68', 'PC管理', '/pc/pc/index', 'fa-laptop', '2', '0', '1', '76', 'Pc', 'pc');
+INSERT INTO `oa_admin_menu` VALUES ('72', '69', '小程序管理', '/weapp/weapp/index', 'fa-mobile-phone', '2', '0', '1', '77', 'Weapp', 'weapp');
 
 -- ----------------------------
 -- Table structure for oa_admin_post
@@ -128,7 +134,7 @@ CREATE TABLE `oa_admin_rule` (
   `pid` int(11) DEFAULT '0' COMMENT '父id，默认0',
   `status` tinyint(3) DEFAULT '1' COMMENT '状态，1启用，0禁用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of oa_admin_rule
@@ -171,6 +177,11 @@ INSERT INTO `oa_admin_rule` VALUES ('69', '应用详情', 'read', '3', '65', '1'
 INSERT INTO `oa_admin_rule` VALUES ('70', '编辑应用', 'update', '3', '65', '1');
 INSERT INTO `oa_admin_rule` VALUES ('71', '删除应用', 'delete', '3', '65', '1');
 INSERT INTO `oa_admin_rule` VALUES ('72', '公众号', 'weChat', '2', '0', '1');
+INSERT INTO `oa_admin_rule` VALUES ('73', 'PC', 'pc', '2', '0', '1');
+INSERT INTO `oa_admin_rule` VALUES ('74', '小程序', 'wechant', '2', '0', '1');
+INSERT INTO `oa_admin_rule` VALUES ('75', '公众号列表', 'index', '3', '72', '1');
+INSERT INTO `oa_admin_rule` VALUES ('76', 'PC管理', 'index', '3', '73', '1');
+INSERT INTO `oa_admin_rule` VALUES ('77', '小程序管理', 'index', '3', '74', '1');
 
 -- ----------------------------
 -- Table structure for oa_admin_structure
@@ -212,7 +223,7 @@ CREATE TABLE `oa_admin_user` (
   `post_id` int(11) DEFAULT NULL COMMENT '岗位',
   `status` tinyint(3) DEFAULT NULL COMMENT '状态,1启用0禁用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of oa_admin_user
