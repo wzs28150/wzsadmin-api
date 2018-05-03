@@ -82,6 +82,17 @@ class Base extends Common
         return resultArray(['data' => $data]);
     }
 
+    public function clearcache()
+    {
+      $userModel = model('User');
+      $param = $this->param;
+      $data = $userModel->clearcatch($param['id']);
+      dump($data);exit;
+      if (!$data) {
+          return resultArray(['error' => $userModel->getError()]);
+      }
+      return resultArray(['data' => '添加成功']);
+    }
     // miss 路由：处理没有匹配到的路由规则
     public function miss()
     {

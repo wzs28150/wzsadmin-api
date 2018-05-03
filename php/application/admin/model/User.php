@@ -256,6 +256,20 @@ class User extends Common
         return $data;
     }
 
+	public function clearCatch(user_id)
+	{
+		// 获取菜单和权限
+		$dataList = $this->getMenuAndRule($userInfo['id']);
+
+		if (!$dataList['menusList']) {
+			$this->error = '没有权限';
+			return false;
+		}
+
+		$data['authList']		= $dataList['rulesList'];
+		$data['menusList']		= $dataList['menusList'];
+		return $data;
+	}
 	/**
 	 * 修改密码
 	 * @param  array   $param  [description]

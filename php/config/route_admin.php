@@ -28,6 +28,8 @@ return [
 	'admin/base/getConfigs' => ['admin/base/getConfigs', ['method' => 'POST']],
 	// 【基础】获取验证码
 	'admin/base/getVerify' => ['admin/base/getVerify', ['method' => 'GET']],
+  // 【基础】清除缓存
+  'admin/base/clearCatch' => ['admin/base/clearCatch', ['method' => 'POST']],
 	// 【基础】上传图片
 	'admin/upload' => ['admin/upload/index', ['method' => 'POST']],
 	// 保存系统配置
